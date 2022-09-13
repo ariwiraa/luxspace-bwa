@@ -19,26 +19,30 @@ class ProductController extends Controller
     public function index()
     {
         //Jika yg dipanggila adalah ajax
-        if(request()->ajax()){
+        if (request()->ajax()) {
             $query = Product::query(); //Ambil dari database
             return DataTables::of($query)
-                ->addColumn('action', function($item) {
+                ->addColumn('action', function ($item) {
                     return '
-                        <a href="'. route('dashboard.product.edit', $item->id) .'" class="bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded-md shadow-lg">
+                         <a class="inline-block border border-blue-700 bg-blue-700 text-white rounded-md px-2 py-1 m-1 transition duration-500 ease select-none hover:bg-blue-800 focus:outline-none focus:shadow-outline" 
+                            href="' . route('dashboard.product.gallery.index', $item->id) . '">
+                            Gallery
+                        </a>
+                        <a href="' . route('dashboard.product.edit', $item->id) . '" class="inline-block border border-gray-700 bg-gray-700 text-white rounded-md px-2 py-1 m-1 transition duration-500 ease select-none hover:bg-gray-800 focus:outline-none focus:shadow-outline">
                             Edit
                         </a>
-                        <form class="inline block" action="'. route('dashboard.product.destroy', $item->id).'" method="POST"> 
-                            <button class="bg-red-500 text-black rounded-md px-2 py-1 m-2">
+                        <form class="inline-block" action="' . route('dashboard.product.destroy', $item->id) . '" method="POST"> 
+                            <button class="border border-red-500 bg-red-500 text-white rounded-md px-2 py-1 m-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline">
                                 Hapus
                             </button>
-                        '. method_field('delete') . csrf_field() .'
+                        ' . method_field('delete') . csrf_field() . '
                         </form>
                     ';
                 })
-                ->editColumn('price', function($item){
+                ->editColumn('price', function ($item) {
                     return number_format($item->price);
                 })
-                ->rawColumns(['action'])//agar tag html terbaca
+                ->rawColumns(['action']) //agar tag html terbaca
                 ->make();
         }
 
@@ -65,11 +69,10 @@ class ProductController extends Controller
     {
         $data = $request->all();
         $data['slug'] = Str::slug($request->name);
-        
+
         Product::create($data);
 
         return redirect()->route('dashboard.product.index');
-
     }
 
     /**
@@ -107,7 +110,7 @@ class ProductController extends Controller
     {
         $data = $request->all();
         $data['slug'] = Str::slug($request->name);
-        
+
         $product->update($data);
 
         return redirect()->route('dashboard.product.index');

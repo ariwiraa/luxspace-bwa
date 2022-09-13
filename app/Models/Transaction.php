@@ -14,7 +14,7 @@ class Transaction extends Model
         'users_id',
         'name',
         'email',
-        'address', 
+        'address',
         'phone',
         'courier',
         'payment',
@@ -23,12 +23,12 @@ class Transaction extends Model
         'status'
     ];
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class, 'users_id', 'id');
     }
 
-    public function transactions() {
-        return $this->hasMany(TransactionItem::class, 'transactions_id', 'id');
-    }
+    // public function transactions() {
+    //     return $this->hasMany(TransactionItem::class, 'transactions_id', 'id');
+    // }
 }
-
